@@ -13,11 +13,8 @@
 #'     \item \code{domain}: Character vector indicating the domain category (e.g.,
 #'       "Physical", "Cognitive", "Social").
 #'     \item \code{dimension}: Character vector specifying dimensions within each domain.
-#'     \item \code{dimension_value}: Numeric vector of dimension scores, typically
-#'       ranging from 0 to 1 or 0 to 100.
 #'     \item \code{weight}: Numeric vector of weights for each dimension.
 #'     \item \code{salience}: Numeric vector of salience scores for each dimension.
-#'     \item \code{color_border}: Character vector of hex color codes for visualization.
 #'   }
 #'
 #' @return A list object of class "dynamics_analysis" containing:
@@ -70,15 +67,8 @@
 #' sample_data <- data.frame(
 #'   domain = rep(c("Physical", "Cognitive", "Social", "Emotional"), each = 4),
 #'   dimension = paste0("Dim", 1:16),
-#'   dimension_value = c(
-#'     runif(4, 70, 90),  # Physical
-#'     runif(4, 60, 80),  # Cognitive
-#'     runif(4, 50, 85),  # Social
-#'     runif(4, 65, 95)   # Emotional
-#'   ),
 #'   weight = rep(c(0.25, 0.25, 0.3, 0.2), each = 4),
-#'   salience = runif(16, 0.7, 1.0),
-#'   color_border = rep(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), each = 4)
+#'   salience = runif(16, 0.7, 1.0)
 #' )
 #'
 #' # Run the analysis
@@ -93,7 +83,7 @@
 #' \code{\link{calculate_gini}} for details on the Gini coefficient calculation.
 #' @importFrom psych geometric.mean
 #' @importFrom dplyr group_by mutate select ungroup distinct
-#' @importFrom stats na.omit
+#' @importFrom stats na.omit complete.cases
 #' @importFrom rlang .data
 #' @importFrom utils globalVariables
 #' @export
@@ -106,48 +96,48 @@ analyze_dynamics <- function(dynamics_df) {
   if (!is.data.frame(dynamics_df)) {
     stop("Input must be a data frame")
   }
-  
+
   # Check for required columns
-  required_cols <- c("domain", "dimension_value", "weight", "salience")
+  required_cols <- c("domain", "weight", "salience")
   missing_cols <- setdiff(required_cols, names(dynamics_df))
   if (length(missing_cols) > 0) {
     stop("Missing required columns: ", paste(missing_cols, collapse = ", "))
   }
-  
+
   # Check for empty data frame
   if (nrow(dynamics_df) == 0) {
     stop("Input data frame must contain at least one row")
   }
-  
+
   # Remove rows with any missing values in required columns
   # This is done silently as per the function's intended behavior
   complete_cases <- complete.cases(dynamics_df[required_cols])
   if (!all(complete_cases)) {
     dynamics_df <- dynamics_df[complete_cases, ]
   }
-  
+
   # Re-check for empty data frame after removing NAs
   if (nrow(dynamics_df) == 0) {
     stop("No valid rows remaining after removing missing values")
   }
-  
+
   # Validate numeric ranges
   if (any(dynamics_df$dimension_value < 0 | dynamics_df$dimension_value > 1)) {
     stop("dimension_value must be between 0 and 1")
   }
-  
+
   if (any(dynamics_df$weight <= 0 | dynamics_df$weight > 1)) {
     stop("weight must be between 0 and 1")
   }
-  
+
   if (any(dynamics_df$salience <= 0 | dynamics_df$salience > 1)) {
     stop("salience must be between 0 and 1")
   }
-  
+
   # Remove empty domain values
   valid_domains <- !is.na(dynamics_df$domain) & dynamics_df$domain != ""
   dynamics_df <- dynamics_df[valid_domains, ]
-  
+
   # Check if we still have data
   if (nrow(dynamics_df) == 0) {
     stop("No valid domain values found after filtering")

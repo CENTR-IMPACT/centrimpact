@@ -19,13 +19,11 @@
 #'   \item{role}{Character vector indicating 'researcher' or 'partner'}
 #'   \item{alignment}{Character vector of alignment categories}
 #'   \item{rating}{Numeric vector of ratings (typically on a Likert scale)}
-#'   \item{color}{Character vector of hex color codes for each alignment category (optional)}
 #' }
 #'
 #' @return A list with the following components:
 #' \describe{
 #'   \item{alignment_medians}{Data frame containing median ratings by alignment category and role}
-#'   \item{icc_score}{ICC object from `irr::icc()` with inter-rater reliability statistics}
 #'   \item{alignment_score}{Formatted ICC value as a character string}
 #' }
 #'
@@ -51,18 +49,17 @@
 #' set.seed(123)
 #' alignment_data <- data.frame(
 #'   role = rep(c("researcher", "partner"), each = 20),
-#'   alignment = rep(c("Research_Questions", "Methodology", "Timeline", 
+#'   alignment = rep(c("Research_Questions", "Methodology", "Timeline",
 #'                   "Data_Needs", "Impact_Goals"), 8),
-#'   rating = sample(1:5, 40, replace = TRUE, prob = c(0.1, 0.2, 0.4, 0.2, 0.1)),
-#'   color = rep(c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"), 8)
+#'   rating = sample(1:5, 40, replace = TRUE, prob = c(0.1, 0.2, 0.4, 0.2, 0.1))
 #' )
 #'
 #' # Run analysis
 #' results <- analyze_alignment(alignment_data)
-#' 
+#'
 #' # View alignment score (ICC)
 #' cat("Inter-rater agreement (ICC):", results$alignment_score, "\n")
-#' 
+#'
 #' # View median ratings by role and alignment
 #' print(results$alignment_medians)
 
