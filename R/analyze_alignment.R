@@ -123,7 +123,7 @@ analyze_alignment <- function(alignment_df) {
 
   # Format the ICC value for display
   # Using absolute value since we're interested in strength of agreement
-  alignment_score <- sprintf("%.2f", abs(icc_score$value))
+  alignment_score <- abs(icc_score$value)
 
   # ===========================================================================
   # [5] Return Results

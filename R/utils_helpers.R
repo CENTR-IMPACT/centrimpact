@@ -117,15 +117,18 @@ calculate_proportional_multiplier <- function(count, all_counts, min_multiplier 
 #' @family statistical functions
 #' @export
 calculate_gini <- function(category_values) {
+  # Ensure input is numeric
+  if (!is.numeric(category_values)) {
+    message("Warning: Converting category_values to numeric")
+    category_values <- as.numeric(as.character(category_values))
+  }
+
   # Calculate the Gini coefficient which measures inequality (concentration)
   # Returns a value between 0 (perfect equality) and 1 (perfect inequality)
   gini <- DescTools::Gini(category_values, na.rm = TRUE)
-  message("Raw Gini: ", gini)
-  balance_score <- 1 - gini
-  message("Balance score (1 - Gini): ", balance_score)
-  final_score <- max(0, min(1, balance_score, na.rm = TRUE))
-  message("Final score after clamping: ", final_score, "\n")
-  return(final_score)
+  gini <- 1 - gini
+  gini <- max(0, min(1, gini, na.rm = TRUE))
+  return(gini)
 }
 
 
