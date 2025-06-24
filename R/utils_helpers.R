@@ -120,6 +120,7 @@ calculate_gini <- function(category_values) {
   # Calculate the Gini coefficient which measures inequality (concentration)
   # Returns a value between 0 (perfect equality) and 1 (perfect inequality)
   gini <- DescTools::Gini(category_values, na.rm = TRUE)
+  gini <- gini - 1
   
   # Ensure the result is a numeric value between 0 and 1
   gini <- max(0, min(1, gini, na.rm = TRUE))
