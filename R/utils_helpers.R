@@ -120,11 +120,11 @@ calculate_gini <- function(category_values) {
   # Calculate the Gini coefficient which measures inequality (concentration)
   # Returns a value between 0 (perfect equality) and 1 (perfect inequality)
   gini <- DescTools::Gini(category_values, na.rm = TRUE)
-  cat(paste("Raw Gini:", gini))
+  message("Raw Gini: ", gini)
   balance_score <- 1 - gini
-  cat(paste("Balance score (1 - Gini):", balance_score))
+  message("Balance score (1 - Gini): ", balance_score)
   final_score <- max(0, min(1, balance_score, na.rm = TRUE))
-  cat(paste("Final score after clamping:", final_score))
+  message("Final score after clamping: ", final_score, "\n")
   return(final_score)
 }
 
