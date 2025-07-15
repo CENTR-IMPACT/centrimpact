@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: "CEnTR*IMPACT"
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: Price
+  given-names: Jeremy F
+  orcid: https://orcid.org/0000-0002-6506-3526
+version: 1.0.0
+doi: 10.5281/zenodo.15933385
+date-released: "2025-07-15"
+url: https://cumuonline.org/research/cumu-collaboratory-research-fellowship/
+repository-code: https://github.com/CEnTR-IMPACT/centrimpact
+license: MIT
+abstract: "The CEnTR*IMPACT community engaged research metrics analysis package in R."

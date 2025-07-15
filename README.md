@@ -93,3 +93,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - The CEnTR-IMPACT team
 - Funding agencies and institutions supporting this work
+
+## How to Cite
+
+If you use this software, please cite:
+
+**Price, Jeremy F. (2025). "CEnTR*IMPACT: Community Engaged and Transformative Research: Inclusive Measurement of Projects And Community Transformation." Zenodo. [https://doi.org/10.5281/zenodo.15933384](https://doi.org/10.5281/zenodo.15933384)**
