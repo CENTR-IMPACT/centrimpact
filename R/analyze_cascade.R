@@ -82,7 +82,7 @@
 #'   \item \strong{Influence Measures}:
 #'     \itemize{
 #'       \item Combines local and global metrics using the formula: I = gamma * (alpha*L + beta*G) + lambda*T
-#'       \item Normalizes scores to [0,1] range for comparability
+#'       \item Normalizes scores to \[0,1\] range for comparability
 #'       \item Ranks nodes within each influence dimension
 #'     }
 #'   \item \strong{Layer Aggregation}:
@@ -146,7 +146,7 @@
 #' @section Helper Functions:
 #' This function assumes the following helper functions are available:
 #' \itemize{
-#'   \item \code{normalize()}: Scales values to [0,1] range
+#'   \item \code{normalize()}: Scales values to \[0,1\] range
 #'   \item \code{calculate_proportional_multiplier()}: Computes layer-size adjustment factors
 #'   \item \code{calculate_gini()}: Computes Gini coefficient for concentration measurement
 #' }
@@ -228,9 +228,9 @@
 #' @author Your Name, Your Institution
 #' Maintainer: Your Name <your.email@example.com>
 #' @export
-#' @importFrom igraph graph_from_data_frame V global_efficiency betweenness eigen_centrality transitivity 
+#' @importFrom igraph graph_from_data_frame V global_efficiency betweenness eigen_centrality transitivity
 #'   harmonic_centrality as_adjacency_matrix alpha_centrality
-#' @importFrom dplyr select mutate group_by ungroup summarize arrange rename left_join right_join distinct first rowwise
+#' @importFrom dplyr select mutate group_by ungroup summarize arrange rename left_join right_join distinct first rowwise where
 #' @importFrom centiserve communitycent communibet crossclique
 #' @importFrom sna connectedness hierarchy lubness flowbet
 #' @importFrom glue glue
@@ -246,57 +246,57 @@ analyze_cascade <- function(network_df) {
   # =============================================================================
   # Purpose: Validate the input data frame structure and content to ensure
   # the function receives valid input before proceeding with computation.
-  
+
   # Check if input is a data frame
   if (!is.data.frame(network_df)) {
     stop("Input must be a data frame")
   }
-  
+
   # Check for required columns
   required_cols <- c("from", "to", "layer")
   missing_cols <- setdiff(required_cols, names(network_df))
   if (length(missing_cols) > 0) {
     stop(sprintf("Missing required columns: %s", paste(missing_cols, collapse = ", ")))
   }
-  
+
   # Check for empty data frame
   if (nrow(network_df) == 0) {
     stop("Input data frame must contain at least one row")
   }
-  
+
   # Check for missing values
   if (any(is.na(network_df[c("from", "to", "layer")]))) {
     stop("Columns 'from', 'to', and 'layer' cannot contain missing values")
   }
-  
+
   # Check layer values are positive
   if (any(network_df$layer <= 0)) {
     stop("Layer values must be positive integers")
   }
-  
+
   # Check for valid node types (numeric or character)
   if (!(is.numeric(network_df$from) || is.character(network_df$from)) ||
       !(is.numeric(network_df$to) || is.character(network_df$to))) {
     stop("Node identifiers in 'from' and 'to' must be either numeric or character")
   }
-  
+
   # Convert node IDs to character for consistent handling
   network_df$from <- as.character(network_df$from)
   network_df$to <- as.character(network_df$to)
-  
+
   # Check for self-loops and remove them with a warning
   self_loops <- network_df$from == network_df$to
   if (any(self_loops)) {
     warning(sprintf("Removed %d self-loops from the network", sum(self_loops)))
     network_df <- network_df[!self_loops, ]
   }
-  
+
   # Check if network is too small for community detection
   unique_nodes <- unique(c(network_df$from, network_df$to))
   if (length(unique_nodes) < 5) {
     stop("Network is too small for community detection. Need at least 5 unique nodes.")
   }
-  
+
   # =============================================================================
   # NETWORK STRUCTURE CREATION AND NODE PREPARATION
   # =============================================================================
@@ -422,7 +422,7 @@ analyze_cascade <- function(network_df) {
   # around each node - important for reaching influence patterns
   local_clustcoef <- normalize(igraph::transitivity(network_graph, type = "local") %>%
                                  replace(is.nan(.), 0))  # Handle NaN values for isolated nodes
-  
+
   # Local betweenness: measures the extent to which a node lies on shortest paths
   # between other nodes within its immediate neighborhood - important for channeling influence
   local_betweenness <- igraph::betweenness(
@@ -484,7 +484,7 @@ analyze_cascade <- function(network_df) {
     if (is.finite(topology_hierarchy)) topology_hierarchy else 0,
     if (is.finite(topology_lubness)) topology_lubness else 0
   )
-  
+
   # Calculate average, ensuring we don't divide by zero
   topology_score <- if (length(topology_measures) > 0) {
     round((mean(topology_measures, na.rm = TRUE) * lambda), 2)
@@ -501,7 +501,7 @@ analyze_cascade <- function(network_df) {
 
   # Ensure all vectors have the same length
   node_count <- nrow(node_layers)
-  
+
   # Create a data frame with all metrics
   # Ensure all vectors are the same length
   metrics_df <- data.frame(
@@ -510,7 +510,7 @@ analyze_cascade <- function(network_df) {
     gamma = as.numeric(node_layers$layer_decay),  # Ensure gamma is numeric
     stringsAsFactors = FALSE
   )
-  
+
   # Add metrics with explicit length checking
   metrics_df$local_community <- as.numeric(local_community[1:node_count])
   metrics_df$local_crossclique <- as.numeric(local_crossclique[1:node_count])
@@ -520,35 +520,35 @@ analyze_cascade <- function(network_df) {
   metrics_df$global_betweenness <- as.numeric(global_betweenness[1:node_count])
   metrics_df$global_alpha <- as.numeric(global_alpha[1:node_count])
   metrics_df$global_harmonic <- as.numeric(global_harmonic[1:node_count])
-  
+
   # Join with layer count information
   # Ensure layer is the same type in both data frames
   layer_count$layer <- as.integer(layer_count$layer)
-  
+
   # Rename count column before join to avoid conflicts
   layer_count <- layer_count %>%
     dplyr::rename(node_count = count)
-  
+
   cascade_df <- metrics_df |>
     dplyr::left_join(layer_count, by = "layer") |>
     dplyr::arrange(name) |>
     dplyr::mutate(
       # Ensure all numeric columns are properly typed
-      dplyr::across(where(is.numeric), as.numeric)
+      dplyr::across(dplyr::where(is.numeric), as.numeric)
     )
-  
+
   # Calculate raw influence measures
   cascade_df <- cascade_df |>
     dplyr::mutate(
       # KNITTING: Ability to bind community members together
       raw_knitting = gamma * (alpha * local_community + beta * global_eigenv) + topology_score,
-      
+
       # BRIDGING: Ability to connect different communities or groups
       raw_bridging = gamma * (alpha * local_crossclique + beta * global_betweenness) + topology_score,
-      
+
       # CHANNELING: Ability to control and direct information flow
       raw_channeling = gamma * (alpha * local_betweenness + beta * global_alpha) + topology_score,
-      
+
       # REACHING: Ability to access and influence distant network parts
       raw_reaching = gamma * (alpha * local_clustcoef + beta * global_harmonic) + topology_score,
 
@@ -637,15 +637,15 @@ analyze_cascade <- function(network_df) {
 
   # Purpose: Package all computed results into a structured list for return
   # to the calling function, ensuring accessibility of all analysis components.
-  
+
   # Create result list with required components
   result <- list(
     cascade_df = cascade_df,        # Layer-wise metrics
     cascade_score = cascade_score   # Overall concentration measure
   )
-  
+
   # Set the class for S3 method dispatch
   class(result) <- "cascade_analysis"
-  
+
   return(result)
 }

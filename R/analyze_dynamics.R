@@ -7,7 +7,7 @@
 #' for analyzing and visualizing the relative development across multiple domains
 #' in psychological, educational, or behavioral assessments.
 #'
-#' @param dynamics_df A data frame with required columns: domain, dimension, dimension_value, weight, salience, color_border.
+#' @param dynamics_df A data frame with required columns: domain, dimension, weight, salience, (optional: color_border).
 #'
 #' @return A list with elements: dynamics_df, domain_df, dynamics_score.
 #'
@@ -50,12 +50,6 @@
 #' sample_data <- data.frame(
 #'   domain = rep(c("Physical", "Cognitive", "Social", "Emotional"), each = 4),
 #'   dimension = paste0("Dim", 1:16),
-#'   dimension_value = c(
-#'     runif(4, 70, 90),  # Physical
-#'     runif(4, 60, 80),  # Cognitive
-#'     runif(4, 50, 85),  # Social
-#'     runif(4, 65, 95)   # Emotional
-#'   ),
 #'   weight = rep(c(0.25, 0.25, 0.3, 0.2), each = 4),
 #'   salience = runif(16, 0.7, 1.0),
 #'   color_border = rep(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), each = 4)
@@ -87,8 +81,8 @@ analyze_dynamics <- function(dynamics_df) {
     stop("Input must be a data frame")
   }
   
-  # Check for required columns
-  required_cols <- c("domain", "dimension_value", "weight", "salience")
+  # Check for required columns (no longer requires dimension_value)
+  required_cols <- c("domain", "dimension", "weight", "salience")
   missing_cols <- setdiff(required_cols, names(dynamics_df))
   if (length(missing_cols) > 0) {
     stop("Missing required columns: ", paste(missing_cols, collapse = ", "))
@@ -100,7 +94,6 @@ analyze_dynamics <- function(dynamics_df) {
   }
   
   # Remove rows with any missing values in required columns
-  # This is done silently as per the function's intended behavior
   complete_cases <- complete.cases(dynamics_df[required_cols])
   if (!all(complete_cases)) {
     dynamics_df <- dynamics_df[complete_cases, ]
@@ -112,16 +105,16 @@ analyze_dynamics <- function(dynamics_df) {
   }
   
   # Validate numeric ranges
-  if (any(dynamics_df$dimension_value < 0 | dynamics_df$dimension_value > 1)) {
-    stop("dimension_value must be between 0 and 1")
-  }
-  
-  if (any(dynamics_df$weight <= 0 | dynamics_df$weight > 1)) {
+  if (any(dynamics_df$weight <= 0 | dynamics_df$weight > 1, na.rm = TRUE)) {
     stop("weight must be between 0 and 1")
   }
-  
-  if (any(dynamics_df$salience <= 0 | dynamics_df$salience > 1)) {
+
+  if (any(dynamics_df$salience <= 0 | dynamics_df$salience > 1, na.rm = TRUE)) {
     stop("salience must be between 0 and 1")
+  }
+
+  if (any(dynamics_df$dimension_value < 0 | dynamics_df$dimension_value > 1, na.rm = TRUE)) {
+    stop("dimension_value must be between 0 and 1")
   }
   
   # Remove empty domain values
@@ -136,12 +129,7 @@ analyze_dynamics <- function(dynamics_df) {
   # ==========================================================================
   # STEP 1: CALCULATE DOMAIN-LEVEL SCORES
   # ==========================================================================
-  # For each domain, we calculate a single representative score using the
-  # geometric mean of all dimension values within that domain. The geometric
-  # mean is preferred over arithmetic mean as it's less sensitive to outliers
-  # and provides a more balanced representation when dealing with multiplicative
-  # relationships between dimensions.
-
+  # Calculate dimension_value as weight * salience
   dynamics_df <- dynamics_df |>
     na.omit() |>
     dplyr::mutate(dimension_value = weight * salience) |>

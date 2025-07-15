@@ -120,10 +120,10 @@ calculate_gini <- function(category_values) {
   # Calculate the Gini coefficient which measures inequality (concentration)
   # Returns a value between 0 (perfect equality) and 1 (perfect inequality)
   gini <- DescTools::Gini(category_values, na.rm = TRUE)
-  
+
   # Ensure the result is a numeric value between 0 and 1
   gini <- max(0, min(1, gini, na.rm = TRUE))
-  
+
   return(gini)
 }
 
@@ -165,10 +165,10 @@ calculate_gini <- function(category_values) {
 #' @param beta Numeric. Density adjustment factor (0-1). Higher values increase the penalty for dense networks.
 #' @param gamma Numeric. Clustering adjustment factor (0-1). Higher values increase the penalty for clustered networks.
 #'
-#' @return A numeric value in [0,1] representing the calculated discount factor.
+#' @return A numeric value in \[0,1\] representing the calculated discount factor.
 #'
 #' @references
-#' [Add relevant citation to your methodology paper here]
+#' Add relevant citation to your methodology paper here
 #'
 #' @examples
 #' \dontrun{
@@ -191,6 +191,7 @@ calculate_gini <- function(category_values) {
 #'   \code{\link[igraph]{transitivity}} for clustering coefficient calculation
 #'
 #' @importFrom igraph edge_density transitivity
+#' @importFrom stats complete.cases
 #'
 #' @export
 #'

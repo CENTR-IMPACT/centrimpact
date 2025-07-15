@@ -20,18 +20,18 @@ higher balance scores indicate more equitable development across domains.
 }
 \details{
 The function:
-  \enumerate{
-    \item Calculates the Gini coefficient using \code{DescTools::Gini()}
-    \item Subtracts from 1 to get the Simpson diversity index
-    \item Formats to 2 decimal places as a character string
-  }
+\enumerate{
+\item Calculates the Gini coefficient using \code{DescTools::Gini()}
+\item Subtracts from 1 to get the Simpson diversity index
+\item Formats to 2 decimal places as a character string
+}
 
-  The Gini coefficient measures inequality (0 = perfect equality, 1 = maximum inequality).
-  By subtracting from 1, we get a "balance" measure where:
-  \itemize{
-    \item 0 = completely unbalanced (all values concentrated in one category)
-    \item 1 = perfectly balanced (all categories have equal values)
-  }
+The Gini coefficient measures inequality (0 = perfect equality, 1 = maximum inequality).
+By subtracting from 1, we get a "balance" measure where:
+\itemize{
+\item 0 = completely unbalanced (all values concentrated in one category)
+\item 1 = perfectly balanced (all categories have equal values)
+}
 }
 \examples{
 # Perfectly balanced distribution

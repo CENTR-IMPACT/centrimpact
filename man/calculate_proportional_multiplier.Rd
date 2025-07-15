@@ -31,8 +31,8 @@ or alpha values) proportionally to data values.
 }
 \details{
 The function performs linear interpolation between min_multiplier and max_multiplier
-  based on where the count falls within the range of all_counts. If all counts are identical,
-  the function returns max_multiplier to avoid division by zero.
+based on where the count falls within the range of all_counts. If all counts are identical,
+the function returns max_multiplier to avoid division by zero.
 }
 \examples{
 counts <- c(5, 10, 15, 20)

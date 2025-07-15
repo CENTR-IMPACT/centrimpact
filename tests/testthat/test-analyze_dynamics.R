@@ -16,23 +16,22 @@ test_that("analyze_dynamics input validation works", {
     weight = numeric(),
     salience = numeric()
   )
-  expect_error(analyze_dynamics(empty_df), "must contain at least one row")
+  expect_error(analyze_dynamics(empty_df), "Missing required columns: dimension")
   
   # Test invalid dimension_value range
   bad_dim_value <- data.frame(
-    domain = c("A", "B"),
-    dimension_value = c(-0.1, 1.1),  # Invalid values
-    weight = c(0.5, 0.5),
-    salience = c(1, 1)
+    domain = "A",
+    dimension = "B",
+    dimension_value = 1.5,  # Invalid value
+    weight = 1,
+    salience = 1
   )
-  expect_error(
-    analyze_dynamics(bad_dim_value), 
-    "dimension_value must be between 0 and 1"
-  )
+  expect_error(analyze_dynamics(bad_dim_value), "dimension_value must be between 0 and 1")
   
   # Test invalid weight range
   bad_weight <- data.frame(
     domain = c("A", "B"),
+    dimension = c("D1", "D2"),
     dimension_value = c(0.5, 0.5),
     weight = c(0, 1.1),  # Invalid values
     salience = c(1, 1)
@@ -45,6 +44,7 @@ test_that("analyze_dynamics input validation works", {
   # Test invalid salience range
   bad_salience <- data.frame(
     domain = c("A", "B"),
+    dimension = c("D1", "D2"),
     dimension_value = c(0.5, 0.5),
     weight = c(0.5, 0.5),
     salience = c(0, 1.1)  # Invalid values
@@ -57,6 +57,7 @@ test_that("analyze_dynamics input validation works", {
   # Test empty domain values are silently dropped
   empty_domain <- data.frame(
     domain = c("", "A"),  # Empty string
+    dimension = c("D1", "D2"),
     dimension_value = c(0.5, 0.5),
     weight = c(0.5, 0.5),
     salience = c(1, 1)
@@ -69,6 +70,7 @@ test_that("analyze_dynamics input validation works", {
   # This includes NA domain values
   na_domain <- data.frame(
     domain = c(NA_character_, "A"),
+    dimension = c("D1", "D2"),
     dimension_value = c(0.5, 0.5),
     weight = c(0.5, 0.5),
     salience = c(1, 1)
@@ -79,6 +81,7 @@ test_that("analyze_dynamics input validation works", {
   # Missing dimension_value
   na_dim_value <- data.frame(
     domain = c("A", "B"),
+    dimension = c("D1", "D2"),
     dimension_value = c(NA, 0.5),
     weight = c(0.5, 0.5),
     salience = c(1, 1)
@@ -88,6 +91,7 @@ test_that("analyze_dynamics input validation works", {
   # Missing weight
   na_weight <- data.frame(
     domain = c("A", "B"),
+    dimension = c("D1", "D2"),
     dimension_value = c(0.5, 0.5),
     weight = c(NA, 0.5),
     salience = c(1, 1)
@@ -97,6 +101,7 @@ test_that("analyze_dynamics input validation works", {
   # Missing salience
   na_salience <- data.frame(
     domain = c("A", "B"),
+    dimension = c("D1", "D2"),
     dimension_value = c(0.5, 0.5),
     weight = c(0.5, 0.5),
     salience = c(1, NA)

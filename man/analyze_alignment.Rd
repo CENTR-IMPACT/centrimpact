@@ -9,18 +9,18 @@ analyze_alignment(alignment_df)
 \arguments{
 \item{alignment_df}{A data frame containing the following columns:
 \describe{
-  \item{role}{Character vector indicating 'researcher' or 'partner'}
-  \item{alignment}{Character vector of alignment categories}
-  \item{rating}{Numeric vector of ratings (typically on a Likert scale)}
-  \item{color}{Character vector of hex color codes for each alignment category (optional)}
+\item{role}{Character vector indicating 'researcher' or 'partner'}
+\item{alignment}{Character vector of alignment categories}
+\item{rating}{Numeric vector of ratings (typically on a Likert scale)}
+\item{color}{Character vector of hex color codes for each alignment category (optional)}
 }}
 }
 \value{
 A list with the following components:
 \describe{
-  \item{alignment_medians}{Data frame containing median ratings by alignment category and role}
-  \item{icc_score}{ICC object from `irr::icc()` with inter-rater reliability statistics}
-  \item{alignment_score}{Formatted ICC value as a character string}
+\item{alignment_medians}{Data frame containing median ratings by alignment category and role}
+\item{icc_score}{ICC object from \code{irr::icc()} with inter-rater reliability statistics}
+\item{alignment_score}{Formatted ICC value as a character string}
 }
 }
 \description{
@@ -31,11 +31,13 @@ to assess absolute agreement between raters.
 }
 \details{
 The function performs the following key operations:
-1. Validates input data structure and values
-2. Calculates interpolated medians for each alignment category by role
-3. Computes geometric means of researcher and partner medians for overall scores
-4. Calculates intraclass correlation coefficient (ICC) to quantify inter-rater agreement
-5. Returns structured results for further analysis and visualization
+\enumerate{
+\item Validates input data structure and values
+\item Calculates interpolated medians for each alignment category by role
+\item Computes geometric means of researcher and partner medians for overall scores
+\item Calculates intraclass correlation coefficient (ICC) to quantify inter-rater agreement
+\item Returns structured results for further analysis and visualization
+}
 }
 \section{Note}{
 

@@ -31,19 +31,19 @@ The discount factor is calculated using the formula:
 \deqn{\text{discount} = \alpha^L \times (1 - \beta \times D) \times (1 - \gamma \times C)}
 where:
 \itemize{
-  \item \eqn{L} is the layer number (1 to n)
-  \item \eqn{D} is the network density (0 to 1)
-  \item \eqn{C} is the global clustering coefficient (0 to 1)
-  \item \eqn{\alpha} is the base decay rate (default: 0.8)
-  \item \eqn{\beta} is the density adjustment factor (default: 0.5)
-  \item \eqn{\gamma} is the clustering adjustment factor (default: 0.3)
+\item \eqn{L} is the layer number (1 to n)
+\item \eqn{D} is the network density (0 to 1)
+\item \eqn{C} is the global clustering coefficient (0 to 1)
+\item \eqn{\alpha} is the base decay rate (default: 0.8)
+\item \eqn{\beta} is the density adjustment factor (default: 0.5)
+\item \eqn{\gamma} is the clustering adjustment factor (default: 0.3)
 }
 
 The discount factor decreases with:
 \itemize{
-  \item Increasing layer depth (exponentially, controlled by \code{alpha})
-  \item Higher network density (linearly, controlled by \code{beta})
-  \item Higher clustering coefficient (linearly, controlled by \code{gamma})
+\item Increasing layer depth (exponentially, controlled by \code{alpha})
+\item Higher network density (linearly, controlled by \code{beta})
+\item Higher clustering coefficient (linearly, controlled by \code{gamma})
 }
 }
 \details{
@@ -68,9 +68,9 @@ print(discount)
 
 }
 \references{
-[Add relevant citation to your methodology paper here]
+Add relevant citation to your methodology paper here
 }
 \seealso{
 \code{\link[igraph]{edge_density}} for network density calculation
-  \code{\link[igraph]{transitivity}} for clustering coefficient calculation
+\code{\link[igraph]{transitivity}} for clustering coefficient calculation
 }

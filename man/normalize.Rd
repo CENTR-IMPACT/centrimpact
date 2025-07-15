@@ -18,8 +18,8 @@ This is useful for standardizing different metrics to a common scale.
 }
 \details{
 Uses the formula: (x - min(x)) / (max(x) - min(x))
-  The minimum value becomes 0, the maximum becomes 1, and all others
-  are proportionally scaled between these bounds.
+The minimum value becomes 0, the maximum becomes 1, and all others
+are proportionally scaled between these bounds.
 }
 \examples{
 values <- c(10, 20, 30, 40, 50)

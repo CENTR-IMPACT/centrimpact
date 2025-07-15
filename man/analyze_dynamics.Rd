@@ -7,7 +7,7 @@
 analyze_dynamics(dynamics_df)
 }
 \arguments{
-\item{dynamics_df}{A data frame with required columns: domain, dimension, dimension_value, weight, salience, color_border.}
+\item{dynamics_df}{A data frame with required columns: domain, dimension, weight, salience, (optional: color_border).}
 }
 \value{
 A list with elements: dynamics_df, domain_df, dynamics_score.
@@ -22,24 +22,24 @@ in psychological, educational, or behavioral assessments.
 \details{
 The function implements a three-step analytical process:
 \enumerate{
-  \item \strong{Domain Score Calculation}: For each domain, computes a composite
-    score using the geometric mean of weighted dimension values. The geometric
-    mean is chosen for its property of being less sensitive to extreme values
-    compared to the arithmetic mean, making it more appropriate for
-    multiplicative relationships between dimensions.
-  \item \strong{Visualization Data Preparation}: Creates a simplified data frame
-    optimized for radar chart visualizations, with one row per domain.
-  \item \strong{Balance Score Computation}: Calculates a balance score (Sd) as
-    1 - G, where G is the Gini coefficient of the domain scores. This metric
-    quantifies the equality of development across all measured domains.
+\item \strong{Domain Score Calculation}: For each domain, computes a composite
+score using the geometric mean of weighted dimension values. The geometric
+mean is chosen for its property of being less sensitive to extreme values
+compared to the arithmetic mean, making it more appropriate for
+multiplicative relationships between dimensions.
+\item \strong{Visualization Data Preparation}: Creates a simplified data frame
+optimized for radar chart visualizations, with one row per domain.
+\item \strong{Balance Score Computation}: Calculates a balance score (Sd) as
+1 - G, where G is the Gini coefficient of the domain scores. This metric
+quantifies the equality of development across all measured domains.
 }
 
 The balance score interpretation:
 \itemize{
-  \item \code{0.8-1.0}: Highly balanced development across domains
-  \item \code{0.6-0.8}: Moderately balanced development
-  \item \code{0.4-0.6}: Somewhat imbalanced development
-  \item \code{0.0-0.4}: Highly imbalanced development
+\item \code{0.8-1.0}: Highly balanced development across domains
+\item \code{0.6-0.8}: Moderately balanced development
+\item \code{0.4-0.6}: Somewhat imbalanced development
+\item \code{0.0-0.4}: Highly imbalanced development
 }
 }
 \section{References}{
@@ -47,10 +47,10 @@ The balance score interpretation:
 For the theoretical foundation of using Gini coefficients in developmental
 balance assessment, see:
 \itemize{
-  \item Smith, J. et al. (2020). "Measuring Developmental Balance in
-    Multidimensional Assessments". Journal of Applied Measurement, 21(3), 245-260.
-  \item Johnson, R. & Lee, K. (2019). "Geometric Means in Psychological
-    Assessment: Theory and Applications". Psychological Methods, 24(2), 123-138.
+\item Smith, J. et al. (2020). "Measuring Developmental Balance in
+Multidimensional Assessments". Journal of Applied Measurement, 21(3), 245-260.
+\item Johnson, R. & Lee, K. (2019). "Geometric Means in Psychological
+Assessment: Theory and Applications". Psychological Methods, 24(2), 123-138.
 }
 }
 
@@ -60,12 +60,6 @@ set.seed(123)
 sample_data <- data.frame(
   domain = rep(c("Physical", "Cognitive", "Social", "Emotional"), each = 4),
   dimension = paste0("Dim", 1:16),
-  dimension_value = c(
-    runif(4, 70, 90),  # Physical
-    runif(4, 60, 80),  # Cognitive
-    runif(4, 50, 85),  # Social
-    runif(4, 65, 95)   # Emotional
-  ),
   weight = rep(c(0.25, 0.25, 0.3, 0.2), each = 4),
   salience = runif(16, 0.7, 1.0),
   color_border = rep(c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), each = 4)
