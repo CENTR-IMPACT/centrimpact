@@ -1,7 +1,7 @@
 # centrimpact
 
 <!-- badges: start -->
-[![https://img.shields.io/badge/devel%20version-1.0.0-990000.svg)](https://github.com/CENTR-IMPACT/centrimpact)
+[![v1.0.0](https://img.shields.io/badge/devel%20version-1.0.0-990000.svg)(https://github.com/CENTR-IMPACT/centrimpact)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15933385.svg)](https://doi.org/10.5281/zenodo.15933385)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
