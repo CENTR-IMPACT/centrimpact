@@ -34,21 +34,24 @@ test_that("analyze_alignment calculates correct medians", {
   # Check medians are calculated correctly
   expect_equal(
     results$alignment_medians$researcher,
-    c(1.5, 3.5)  # Median of (1,2) and (3,4)
+    c(0.00, 0.67),  # Normalized and rounded to 2 decimals
+    tolerance = 1e-2
   )
   expect_equal(
-    results$alignment_medians$partner,
-    c(2.5, 4.5)  # Median of (2,3) and (4,5)
+    round(results$alignment_medians$partner, 2),
+    c(0.33, 1.00),  # Normalized and rounded to 2 decimals
+    tolerance = 1e-2
   )
   
   # Check geometric mean calculation with tolerance for floating point
   expected_means <- c(
-    round(sqrt(1.5 * 2.5), 2),  # Rounded to 2 decimal places
-    round(sqrt(3.5 * 4.5), 2)   # Rounded to 2 decimal places
+    round(sqrt(0.00 * 0.33), 2),  # 0.00
+    round(sqrt(0.67 * 1.00), 2)  # 0.82
   )
   expect_equal(
     results$alignment_medians$overall,
-    expected_means
+    expected_means,
+    tolerance = 1e-2
   )
 })
 
@@ -65,8 +68,8 @@ test_that("analyze_alignment handles edge cases", {
   )
   
   results <- analyze_alignment(tied_data)
-  expect_equal(results$alignment_medians$researcher, 1)
-  expect_equal(results$alignment_medians$partner, 5)
+  expect_equal(results$alignment_medians$researcher, 0.00, tolerance = 1e-2)
+  expect_equal(results$alignment_medians$partner, 1.00, tolerance = 1e-2)
   
   # Test with single category
   single_cat <- data.frame(

@@ -94,7 +94,7 @@ analyze_alignment <- function(alignment_df) {
       int_median = round(psych::interp.median(rating, w = 1), 2),
       .groups = "drop"
     ) |>
-    # Reshape to wide format with roles as columns
+    dplyr::mutate(int_median = normalize(int_median)) |>
     tidyr::pivot_wider(
       names_from = role,
       values_from = int_median
