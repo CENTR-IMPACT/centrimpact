@@ -1,7 +1,7 @@
 Package: centrimpact
 Type: Package
 Title: Supporting the Analysis and Visualization of Community Engaged Research Metrics
-Version: 0.1.1
+Version: 1.0.0
 Authors@R: c(
     person(
       "Jeremy", "Price",
