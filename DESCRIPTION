@@ -1,7 +1,7 @@
 Package: centrimpact
 Type: Package
 Title: Supporting the Analysis and Visualization of Community Engaged Research Metrics
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person(
       "Jeremy", "Price",
@@ -37,9 +37,11 @@ Imports:
     psych (>= 2.3.0),
     tibble,
     stats,
-    utils
+    utils,
+    lifecycle
 Suggests:
     testthat (>= 3.0.0)
 URL: https://github.com/CENTRIMPACT/centrimpact
 BugReports: https://github.com/CENTRIMPACT/centrimpact/issues
 Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
