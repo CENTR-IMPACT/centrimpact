@@ -107,11 +107,11 @@ calculate_proportional_multiplier <- function(count, all_counts, min_multiplier 
 #' @examples
 #' # Perfectly balanced distribution
 #' balanced <- c(25, 25, 25, 25)
-#' calculate_gini(balanced)  # Returns "1.00"
+#' calculate_gini(balanced) # Returns "1.00"
 #'
 #' # Unbalanced distribution
 #' unbalanced <- c(90, 5, 3, 2)
-#' calculate_gini(unbalanced)  # Returns a lower value (e.g., "0.38")
+#' calculate_gini(unbalanced) # Returns a lower value (e.g., "0.38")
 #'
 #' @seealso \code{\link[DescTools]{Gini}} for the underlying Gini coefficient calculation
 #' @family statistical functions
@@ -124,7 +124,10 @@ calculate_gini <- function(category_values) {
   # Ensure the result is a numeric value between 0 and 1
   gini <- max(0, min(1, gini, na.rm = TRUE))
 
-  return(gini)
+  # Return 1 - Gini so that higher values = more balanced (better balance score)
+  balance_score <- 1 - gini
+
+  return(balance_score)
 }
 
 
@@ -179,9 +182,9 @@ calculate_gini <- function(category_values) {
 #' discount <- calculate_dynamic_discount_topology(
 #'   layer = 2,
 #'   graph = g,
-#'   alpha = 0.8,  # Standard decay rate
-#'   beta = 0.5,   # Moderate density penalty
-#'   gamma = 0.3   # Mild clustering penalty
+#'   alpha = 0.8, # Standard decay rate
+#'   beta = 0.5, # Moderate density penalty
+#'   gamma = 0.3 # Mild clustering penalty
 #' )
 #' print(discount)
 #' }
@@ -197,7 +200,6 @@ calculate_gini <- function(category_values) {
 #'
 calculate_dynamic_discount_topology <- function(
     layer, graph, alpha = 0.8, beta = 0.5, gamma = 0.3) {
-
   # Calculate network density (ratio of actual edges to possible edges)
   # Range: 0 (no edges) to 1 (complete graph)
   density <- edge_density(graph)

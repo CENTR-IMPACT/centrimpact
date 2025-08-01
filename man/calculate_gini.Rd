@@ -36,11 +36,11 @@ By subtracting from 1, we get a "balance" measure where:
 \examples{
 # Perfectly balanced distribution
 balanced <- c(25, 25, 25, 25)
-calculate_gini(balanced)  # Returns "1.00"
+calculate_gini(balanced) # Returns "1.00"
 
 # Unbalanced distribution
 unbalanced <- c(90, 5, 3, 2)
-calculate_gini(unbalanced)  # Returns a lower value (e.g., "0.38")
+calculate_gini(unbalanced) # Returns a lower value (e.g., "0.38")
 
 }
 \seealso{

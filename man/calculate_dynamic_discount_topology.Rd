@@ -59,9 +59,9 @@ g <- sample_gnp(n = 100, p = 0.1)
 discount <- calculate_dynamic_discount_topology(
   layer = 2,
   graph = g,
-  alpha = 0.8,  # Standard decay rate
-  beta = 0.5,   # Moderate density penalty
-  gamma = 0.3   # Mild clustering penalty
+  alpha = 0.8, # Standard decay rate
+  beta = 0.5, # Moderate density penalty
+  gamma = 0.3 # Mild clustering penalty
 )
 print(discount)
 }
