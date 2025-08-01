@@ -139,13 +139,21 @@ analyze_dynamics <- function(dynamics_df) {
     dplyr::group_by(domain, dimension) |>
     # Calculate geometric mean for each dimension and round to 2 decimal places
     dplyr::mutate(dimension_score = round(psych::geometric.mean(dimension_value), 2)) |>
-    dplyr::ungroup() |>
-    # Now group by domain to calculate domain scores from dimension scores
-    dplyr::group_by(domain) |>
-    # Calculate geometric mean for each domain using dimension scores
-    dplyr::mutate(domain_score = round(psych::geometric.mean(dimension_score), 2)) |>
-    # Remove grouping to return to ungrouped data frame
     dplyr::ungroup()
+
+  # Create a separate dimension summary for domain calculations
+  dimension_summary <- dynamics_df |>
+    dplyr::distinct(domain, dimension, .keep_all = TRUE) |>
+    dplyr::select(domain, dimension, dimension_score)
+
+  # Calculate domain scores from unique dimension scores
+  domain_scores <- dimension_summary |>
+    dplyr::group_by(domain) |>
+    dplyr::summarise(domain_score = round(psych::geometric.mean(dimension_score), 2), .groups = "drop")
+
+  # Join domain scores back to the main data
+  dynamics_df <- dynamics_df |>
+    dplyr::left_join(domain_scores, by = "domain")
 
   # ==========================================================================
   # STEP 2: CREATE DOMAIN-LEVEL VISUALIZATION DATA
