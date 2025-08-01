@@ -51,21 +51,22 @@
 #' set.seed(123)
 #' alignment_data <- data.frame(
 #'   role = rep(c("researcher", "partner"), each = 20),
-#'   alignment = rep(c("Research_Questions", "Methodology", "Timeline", 
-#'                   "Data_Needs", "Impact_Goals"), 8),
+#'   alignment = rep(c(
+#'     "Research_Questions", "Methodology", "Timeline",
+#'     "Data_Needs", "Impact_Goals"
+#'   ), 8),
 #'   rating = sample(1:5, 40, replace = TRUE, prob = c(0.1, 0.2, 0.4, 0.2, 0.1)),
 #'   color = rep(c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"), 8)
 #' )
 #'
 #' # Run analysis
 #' results <- analyze_alignment(alignment_data)
-#' 
+#'
 #' # View alignment score (ICC)
 #' cat("Inter-rater agreement (ICC):", results$alignment_score, "\n")
-#' 
+#'
 #' # View median ratings by role and alignment
 #' print(results$alignment_medians)
-
 analyze_alignment <- function(alignment_df) {
 
   # ===========================================================================
@@ -74,8 +75,10 @@ analyze_alignment <- function(alignment_df) {
   # Ensure required columns are present
   required_cols <- c("role", "alignment", "rating")
   if (!all(required_cols %in% names(alignment_df))) {
-    stop("Input data must contain columns: ",
-         paste(required_cols, collapse = ", "))
+    stop(
+      "Input data must contain columns: ",
+      paste(required_cols, collapse = ", ")
+    )
   }
 
   # Ensure role has expected values
@@ -119,9 +122,9 @@ analyze_alignment <- function(alignment_df) {
   # Using two-way random effects model for absolute agreement (single rater)
   icc_score <- irr::icc(
     dplyr::select(medians, researcher, partner),
-    type = "agreement",  # Absolute agreement rather than consistency
-    model = "twoway",    # Both rater and target effects are random
-    unit = "single"      # Single rater reliability
+    type = "agreement", # Absolute agreement rather than consistency
+    model = "twoway", # Both rater and target effects are random
+    unit = "single" # Single rater reliability
   )
 
   # Format the ICC value for display
@@ -133,9 +136,9 @@ analyze_alignment <- function(alignment_df) {
   # ===========================================================================
   # Compile all results into a structured list
   results <- list(
-    alignment_medians = medians,            # Median ratings by alignment and role
-    icc_score = icc_score,        # Full ICC model object
-    alignment_score = alignment_score  # Formatted ICC value
+    alignment_medians = medians, # Median ratings by alignment and role
+    icc_score = icc_score, # Full ICC model object
+    alignment_score = alignment_score # Formatted ICC value
   )
 
   return(results)

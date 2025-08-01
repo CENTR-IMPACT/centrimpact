@@ -50,8 +50,10 @@ The function uses interpolation to handle tied values when calculating medians.
 set.seed(123)
 alignment_data <- data.frame(
   role = rep(c("researcher", "partner"), each = 20),
-  alignment = rep(c("Research_Questions", "Methodology", "Timeline", 
-                  "Data_Needs", "Impact_Goals"), 8),
+  alignment = rep(c(
+    "Research_Questions", "Methodology", "Timeline",
+    "Data_Needs", "Impact_Goals"
+  ), 8),
   rating = sample(1:5, 40, replace = TRUE, prob = c(0.1, 0.2, 0.4, 0.2, 0.1)),
   color = rep(c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"), 8)
 )

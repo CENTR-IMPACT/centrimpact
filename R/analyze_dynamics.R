@@ -72,6 +72,8 @@
 #' @importFrom utils globalVariables
 #' @export
 #'
+
+
 analyze_dynamics <- function(dynamics_df) {
   # ==========================================================================
   # INPUT VALIDATION
@@ -80,30 +82,30 @@ analyze_dynamics <- function(dynamics_df) {
   if (!is.data.frame(dynamics_df)) {
     stop("Input must be a data frame")
   }
-  
+
   # Check for required columns (no longer requires dimension_value)
   required_cols <- c("domain", "dimension", "weight", "salience")
   missing_cols <- setdiff(required_cols, names(dynamics_df))
   if (length(missing_cols) > 0) {
     stop("Missing required columns: ", paste(missing_cols, collapse = ", "))
   }
-  
+
   # Check for empty data frame
   if (nrow(dynamics_df) == 0) {
     stop("Input data frame must contain at least one row")
   }
-  
+
   # Remove rows with any missing values in required columns
   complete_cases <- complete.cases(dynamics_df[required_cols])
   if (!all(complete_cases)) {
     dynamics_df <- dynamics_df[complete_cases, ]
   }
-  
+
   # Re-check for empty data frame after removing NAs
   if (nrow(dynamics_df) == 0) {
     stop("No valid rows remaining after removing missing values")
   }
-  
+
   # Validate numeric ranges
   if (any(dynamics_df$weight <= 0 | dynamics_df$weight > 1, na.rm = TRUE)) {
     stop("weight must be between 0 and 1")
@@ -116,28 +118,32 @@ analyze_dynamics <- function(dynamics_df) {
   if (any(dynamics_df$dimension_value < 0 | dynamics_df$dimension_value > 1, na.rm = TRUE)) {
     stop("dimension_value must be between 0 and 1")
   }
-  
+
   # Remove empty domain values
   valid_domains <- !is.na(dynamics_df$domain) & dynamics_df$domain != ""
   dynamics_df <- dynamics_df[valid_domains, ]
-  
+
   # Check if we still have data
   if (nrow(dynamics_df) == 0) {
     stop("No valid domain values found after filtering")
   }
 
   # ==========================================================================
-  # STEP 1: CALCULATE DOMAIN-LEVEL SCORES
+  # STEP 1: CALCULATE DIMENSION-LEVEL SCORES, THEN DOMAIN-LEVEL SCORES
   # ==========================================================================
-  # Calculate dimension_value as weight * salience
+  # Calculate dimension_value as weight * salience (descriptor level)
   dynamics_df <- dynamics_df |>
     na.omit() |>
     dplyr::mutate(dimension_value = weight * salience) |>
-    # Group by domain to perform within-domain calculations
+    # Group by domain and dimension to calculate dimension scores first
+    dplyr::group_by(domain, dimension) |>
+    # Calculate geometric mean for each dimension and round to 2 decimal places
+    dplyr::mutate(dimension_score = round(psych::geometric.mean(dimension_value), 2)) |>
+    dplyr::ungroup() |>
+    # Now group by domain to calculate domain scores from dimension scores
     dplyr::group_by(domain) |>
-    # Calculate geometric mean for each domain and round to 2 decimal places
-    # for cleaner presentation in visualizations
-    dplyr::mutate(domain_score = round(psych::geometric.mean(dimension_value), 2)) |>
+    # Calculate geometric mean for each domain using dimension scores
+    dplyr::mutate(domain_score = round(psych::geometric.mean(dimension_score), 2)) |>
     # Remove grouping to return to ungrouped data frame
     dplyr::ungroup()
 
